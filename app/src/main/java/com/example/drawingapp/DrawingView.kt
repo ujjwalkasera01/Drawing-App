@@ -6,7 +6,10 @@ package com.example.drawingapp
  */
 import android.graphics.*
 import android.content.Context
+import android.content.res.Resources
 import android.util.AttributeSet
+import android.util.DisplayMetrics
+import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
 
@@ -17,10 +20,11 @@ class DrawingView(context: Context, attrs:AttributeSet) : View(context,attrs) {
     private var mCanvasBitmap : Bitmap ?= null
     private var mDrawPaint : Paint ?= null
     private var mCanvasPaint : Paint ?= null
-    private var mBrushSize : Float = 0.toFloat()
+    private var mBrushSize : Float = 1.toFloat()
     private var color : Int = Color.BLACK
     private var canvas : Canvas ?= null
-    /** Ye hmara ek trike se jo jo hmre path track krege hm uska list bna ke
+
+    /** Ye hmara ek trike se jo jo hm path track krege hm uska list bna ke
      * rkhe ga taki phr se us path ko bna ke use persist kr skte */
     private val mPath = ArrayList<CustomPath>()
 
@@ -37,7 +41,9 @@ class DrawingView(context: Context, attrs:AttributeSet) : View(context,attrs) {
         mDrawPaint!!.strokeJoin = Paint.Join.ROUND
         mDrawPaint!!.strokeCap = Paint.Cap.ROUND
         mCanvasPaint = Paint(Paint.DITHER_FLAG)
-        mBrushSize = 10.toFloat()
+        // Kyuki hm mainActivity me hi brushSize ko define kr de rhe to
+        // is lie hm ise hta skte h
+        // mBrushSize = 10.toFloat()
 
     }
 
@@ -114,6 +120,15 @@ class DrawingView(context: Context, attrs:AttributeSet) : View(context,attrs) {
         return true
     }
 
+    /** Isme hm brush Size ko chnage krege jo user ne select kiya h uske according
+     * Hm mBrushSize ko newSize ke equal nhi kr skte kyu nhi hme screen
+     * dimension ko bi consider krna hoga
+     * Same size agr agr screen pe alg alg size ke view ho skte h */
+    fun setSizeForBrush(newSize : Float){
+        mBrushSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+            newSize, resources.displayMetrics)
+        mDrawPaint!!.strokeWidth = mBrushSize
+    }
     internal inner class CustomPath(var colour : Int,var brushThickness : Float) : Path() {
 
     }
