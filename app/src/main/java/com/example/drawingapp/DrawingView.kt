@@ -4,11 +4,10 @@ package com.example.drawingapp
  * import all files present in graphic
  * we don,t need to separately import things under it
  */
+import android.annotation.SuppressLint
 import android.graphics.*
 import android.content.Context
-import android.content.res.Resources
 import android.util.AttributeSet
-import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
@@ -20,7 +19,7 @@ class DrawingView(context: Context, attrs:AttributeSet) : View(context,attrs) {
     private var mCanvasBitmap : Bitmap ?= null
     private var mDrawPaint : Paint ?= null
     private var mCanvasPaint : Paint ?= null
-    private var mBrushSize : Float = 1.toFloat()
+    private var mBrushSize : Float = 3.toFloat()
     private var color : Int = Color.BLACK
     private var canvas : Canvas ?= null
 
@@ -67,6 +66,7 @@ class DrawingView(context: Context, attrs:AttributeSet) : View(context,attrs) {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvas.drawBitmap(mCanvasBitmap!!,0f,0f,mCanvasPaint)
+
         /** ye hmara current runtime me path draw krega */
         if(!mDrawPath!!.isEmpty){
             mDrawPaint!!.strokeWidth = mDrawPath!!.brushThickness
@@ -86,6 +86,7 @@ class DrawingView(context: Context, attrs:AttributeSet) : View(context,attrs) {
     }
 
     /** ye Function btae ga ki kb draw krna h kch bi */
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         val touchX = event?.x
         val touchY = event?.y
@@ -129,6 +130,15 @@ class DrawingView(context: Context, attrs:AttributeSet) : View(context,attrs) {
             newSize, resources.displayMetrics)
         mDrawPaint!!.strokeWidth = mBrushSize
     }
+
+    /** Jo color user ne select kiya h wo ye set krega */
+    fun setColor(newColor : String){
+        /** firstly setting our colr variable */
+        color = Color.parseColor(newColor)
+        /** then setting our drawpaint color  which will draw in our canvas*/
+        mDrawPaint!!.color = color
+    }
+
     internal inner class CustomPath(var colour : Int,var brushThickness : Float) : Path() {
 
     }
