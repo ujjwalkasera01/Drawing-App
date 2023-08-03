@@ -6,24 +6,39 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <com.example.drawingapp.DrawingView
-        android:id="@+id/drawing_view"
+    <FrameLayout
+        android:id="@+id/fl_drawing_view_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="5dp"
-        android:background="@drawable/background_drawing_view_layout"
+        android:layout_margin="3dp"
         app:layout_constraintBottom_toTopOf="@id/ll_paint_colors"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/background_drawing_view_layout" >
+
+        <ImageView
+            android:id="@+id/iv_background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/background_image"
+            />
+
+        <com.example.drawingapp.DrawingView
+            android:id="@+id/drawing_view"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            />
+
+        </FrameLayout>
 
     <LinearLayout
         android:id="@+id/ll_paint_colors"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/drawing_view"
-        app:layout_constraintBottom_toTopOf="@id/ib_brush"
+        app:layout_constraintTop_toBottomOf="@id/fl_drawing_view_container"
+        app:layout_constraintBottom_toTopOf="@id/ll_action_buttons"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:orientation="horizontal">
@@ -36,6 +51,7 @@
             android:tag="@color/skin"
             android:onClick="paintClicked"
             android:background="@color/skin"
+            tools:ignore="UsingOnClickInXml"
             />
 
         <ImageButton
@@ -46,6 +62,7 @@
             android:tag="@color/black"
             android:onClick="paintClicked"
             android:background="@color/black"
+            tools:ignore="UsingOnClickInXml"
             />
 
         <ImageButton
@@ -56,6 +73,7 @@
             android:tag="@color/red"
             android:onClick="paintClicked"
             android:background="@color/red"
+            tools:ignore="UsingOnClickInXml"
             />
 
         <ImageButton
@@ -66,6 +84,7 @@
             android:tag="@color/green"
             android:onClick="paintClicked"
             android:background="@color/green"
+            tools:ignore="UsingOnClickInXml"
             />
 
         <ImageButton
@@ -76,6 +95,7 @@
             android:tag="@color/blue"
             android:onClick="paintClicked"
             android:background="@color/blue"
+            tools:ignore="UsingOnClickInXml"
             />
 
         <ImageButton
@@ -86,6 +106,7 @@
             android:tag="@color/yellow"
             android:onClick="paintClicked"
             android:background="@color/yellow"
+            tools:ignore="UsingOnClickInXml"
             />
 
         <ImageButton
@@ -96,6 +117,7 @@
             android:tag="@color/lollipop"
             android:onClick="paintClicked"
             android:background="@color/lollipop"
+            tools:ignore="UsingOnClickInXml"
             />
 
         <ImageButton
@@ -106,6 +128,7 @@
             android:tag="@color/random"
             android:onClick="paintClicked"
             android:background="@color/random"
+            tools:ignore="UsingOnClickInXml"
             />
 
         <ImageButton
@@ -116,21 +139,39 @@
             android:tag="@color/white"
             android:onClick="paintClicked"
             android:background="@color/white"
+            tools:ignore="UsingOnClickInXml"
             />
 
     </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/ib_brush"
-        android:layout_height="50dp"
-        android:layout_width="50dp"
-        android:layout_margin="5dp"
-        android:src="@drawable/ic_brush"
-        android:scaleType="fitXY"
+    <LinearLayout
+        android:id="@+id/ll_action_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
         app:layout_constraintTop_toBottomOf="@id/ll_paint_colors"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageButton
+            android:id="@+id/ib_gallery"
+            android:layout_height="50dp"
+            android:layout_width="50dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_gallery"
+            android:scaleType="fitXY"
+            />
+
+        <ImageButton
+            android:id="@+id/ib_brush"
+            android:layout_height="50dp"
+            android:layout_width="50dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/ic_brush"
+            android:scaleType="fitXY"
+            />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
