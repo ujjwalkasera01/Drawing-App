@@ -27,8 +27,32 @@ class DrawingView(context: Context, attrs:AttributeSet) : View(context,attrs) {
      * rkhe ga taki phr se us path ko bna ke use persist kr skte */
     private val mPath = ArrayList<CustomPath>()
 
+    /** We are storing the paths that we are removing as we can similarly implement Redo button
+     * with path that have been removed */
+    private val mUndoPath = ArrayList<CustomPath>()
+
     init{
         setUpDrawing()
+    }
+
+    fun onClickUndo(){
+        if(mPath.size > 0){
+            mUndoPath.add(mPath.removeAt(mPath.size-1))
+            /** As our onDraw function is overridden function
+             * "invalidate" - will internally call onDraw Function and rewrite the whole screen or
+             * canvas once again */
+            invalidate()
+        }
+    }
+
+    fun onClickRedo(){
+        if(mUndoPath.size > 0){
+            mPath.add(mUndoPath.removeAt(mUndoPath.size-1))
+            /** As our onDraw function is overridden function
+             * "invalidate" - will internally call onDraw Function and rewrite the whole screen or
+             * canvas once again */
+            invalidate()
+        }
     }
 
     /** Initialising the variables we have created earlier */

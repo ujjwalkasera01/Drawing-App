@@ -4,7 +4,6 @@ import android.Manifest
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
-import android.media.Image
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
@@ -18,13 +17,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.get
-import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
 
     private var drawingView : DrawingView ?= null
     private var mImageButtonCurrentPaint : ImageButton ?= null
 
+    /** Function to access gallery and pick the image from that and set it as background image */
     private val openGalleryLauncher : ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
             result ->
@@ -34,6 +33,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+    /** Function to requests for permission */
     private val requestPermission : ActivityResultLauncher<Array<String>> =
             registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){
                 permissions ->
@@ -65,21 +65,31 @@ class MainActivity : AppCompatActivity() {
         drawingView = findViewById(R.id.drawing_view)
 
         /** Linear layout ek array ke trh behave krta h
-         * to hm isme element ko accese uske index se kr skte h*/
+         * to hm isme element ko access uske index se kr skte h*/
         val linearLayoutPaintColor  : LinearLayout = findViewById(R.id.ll_paint_colors)
         mImageButtonCurrentPaint = linearLayoutPaintColor[1] as ImageButton
         mImageButtonCurrentPaint!!.setImageDrawable(
             ContextCompat.getDrawable(this,R.drawable.pallet_select)
         )
 
-        val ib_brush : ImageButton = findViewById(R.id.ib_brush)
-        ib_brush.setOnClickListener{
+        val ibBrush : ImageButton = findViewById(R.id.ib_brush)
+        ibBrush.setOnClickListener{
             showBrushSizeChooserDialog()
         }
 
-        val ib_gallery : ImageButton =findViewById(R.id.ib_gallery)
-        ib_gallery.setOnClickListener{
+        val ibGallery : ImageButton =findViewById(R.id.ib_gallery)
+        ibGallery.setOnClickListener{
             requestStoragePermission()
+        }
+
+        val ibUndo : ImageButton =findViewById(R.id.ib_undo)
+        ibUndo.setOnClickListener{
+            drawingView?.onClickUndo()
+        }
+
+        val ibRedo : ImageButton =findViewById(R.id.ib_redo)
+        ibRedo.setOnClickListener{
+            drawingView?.onClickRedo()
         }
     }
 
@@ -152,12 +162,16 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /** For Checking whether we have request for that permission earlier or not.
+     * if yes then show why we needed that and you have denied
+     * if no then ask for permission */
      private fun requestStoragePermission(){
          if(ActivityCompat.shouldShowRequestPermissionRationale(this
                  ,Manifest.permission.READ_EXTERNAL_STORAGE)){
              showRationaleDialog("Kids Drawing App", "Kids Drawing App needs to" +
                      "Access your External Storage")
          }else{
+             /** Passing array of permission for requesting multiple permissions */
              requestPermission.launch(arrayOf(
                  Manifest.permission.READ_EXTERNAL_STORAGE
                  // TODO - Permission to write in External Storage ( Saving file feature)
@@ -165,6 +179,7 @@ class MainActivity : AppCompatActivity() {
          }
      }
 
+    /** Dialog Box to show our message to user */
     private fun showRationaleDialog(title:String , message:String){
         val builder:AlertDialog.Builder=AlertDialog.Builder(this)
         builder.setTitle(title).setMessage(message)
